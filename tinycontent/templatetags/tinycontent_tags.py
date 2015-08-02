@@ -2,9 +2,19 @@ from django import template
 from django.template.loader import render_to_string
 from django.template.base import TemplateSyntaxError
 from django.utils.encoding import force_text
+from django.conf import settings
 from tinycontent.models import TinyContent
-
+from datetime import datetime
 register = template.Library()
+
+
+def check_edit_mode(request):
+    if not getattr(settings, 'TINYCONTENT_EDIT_MODE', False):
+        return True
+    z = request.session.get('tinycontent_edit', -1)
+    if datetime.now() < datetime.fromtimestamp(z):
+        return True
+    return False
 
 
 class TinyContentNode(template.Node):
@@ -16,6 +26,7 @@ class TinyContentNode(template.Node):
         return ':'.join(x.resolve(context) for x in self.args)
 
     def render(self, context):
+        context.update({'tinycontent_edit': check_edit_mode(context['request'])})
         try:
             name = self.get_name(context)
             obj = TinyContent.get_content_by_name(name)
@@ -45,7 +56,7 @@ def tinycontent(parser, token):
 
 @register.simple_tag(takes_context=True)
 def tinycontent_simple(context, *args):
-
+    context.update({'tinycontent_edit': check_edit_mode(context['request'])})
     if not args:
         raise TemplateSyntaxError("'tinycontent' tag takes arguments.")
 
