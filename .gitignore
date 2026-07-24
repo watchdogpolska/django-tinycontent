@@ -12,6 +12,8 @@ build/
 test.db
 tests/testmedia/
 .cache/
+.pytest_cache/
 demo/db.sqlite3
 demo/media/tinycontent/uploads/*
 !demo/media/tinycontent/uploads/sample.txt
+.env
