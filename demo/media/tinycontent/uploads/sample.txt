@@ -1,0 +1,2 @@
+This is a sample uploaded file, used by the django-tinycontent demo site
+to show off the built-in file-upload filter (@file:slug syntax).
