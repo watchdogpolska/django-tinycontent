@@ -1,20 +1,18 @@
 import re
+
 from tinycontent.models import TinyContentFileUpload
 
-
-fileupload_expression = re.compile(r'(@file:([A-Za-z0-9\-_]+))')
+fileupload_expression = re.compile(r"(@file:([A-Za-z0-9\-_]+))")
 
 
 class FileUploadMatch:
-    def __init__(self, match):
+    def __init__(self, match: tuple[str, str]) -> None:
         self.full = match[0]
-        self.file = TinyContentFileUpload.objects.get(
-            slug=match[1]
-        )
+        self.file = TinyContentFileUpload.objects.get(slug=match[1])
 
 
-def get_fileuploads(text):
-    fileuploads = []
+def get_fileuploads(text: str) -> list[FileUploadMatch]:
+    fileuploads: list[FileUploadMatch] = []
 
     for match in fileupload_expression.findall(text):
         try:

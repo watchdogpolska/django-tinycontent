@@ -13,7 +13,5 @@ def test_with_html_simple(html_content):
 @pytest.mark.django_db
 def test_with_html_complex(html_content):
     assert "<strong>&amp;</strong>" == render_template(
-        "{% tinycontent 'html' %}"
-        "Not found."
-        "{% endtinycontent %}"
+        "{% tinycontent 'html' %}Not found.{% endtinycontent %}"
     )

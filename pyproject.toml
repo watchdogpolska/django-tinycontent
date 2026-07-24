@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-tinycontent"
+dynamic = ["version"]
+description = "A Django app for managing re-usable blocks of tiny content."
+readme = "README.rst"
+license = { text = "BSD-3-Clause" }
+authors = [{ name = "Dominic Rodger", email = "internet@dominicrodger.com" }]
+requires-python = ">=3.10"
+dependencies = [
+    "Django>=5.2",
+    "django-autoslug>=1.9.0",
+    "markdown>=3.4",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "License :: OSI Approved :: BSD License",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/watchdogpolska/django-tinycontent"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "pytest-django>=4.8",
+    "pytest-cov>=5.0",
+]
+dev = [
+    "ruff>=0.6",
+    "build>=1.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["tinycontent*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "tinycontent.__version__" }
+
+[tool.setuptools.package-data]
+tinycontent = ["py.typed", "templates/**/*", "locale/**/*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+addopts = "--tb=short"
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+extend-exclude = ["tinycontent/migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["tinycontent"]

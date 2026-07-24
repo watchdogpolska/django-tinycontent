@@ -14,11 +14,8 @@ RUN groupadd -g "${GID}" appuser \
 
 WORKDIR /app
 
-COPY requirements-dev.txt ./
-RUN pip install --no-cache-dir -r requirements-dev.txt
-
 COPY . .
-RUN pip install --no-cache-dir -e . \
+RUN pip install --no-cache-dir -e ".[test,dev]" \
     && chown -R "${UID}:${GID}" /app
 
 USER appuser

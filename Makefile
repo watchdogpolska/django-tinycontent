@@ -1,12 +1,11 @@
-.PHONY: clean docs lint test testall coverage release sdist
+.PHONY: clean docs lint test coverage release sdist
 
 help:
 	@echo "clean - remove build and Python artifacts"
 	@echo "docs - build the documentation"
-	@echo "lint - run flake8"
-	@echo "test - run tests quickly with the default Python"
-	@echo "testall - run tests on every Python version with tox"
-	@echo "coverage - check code coverage quickly with the default Python"
+	@echo "lint - run ruff"
+	@echo "test - run tests"
+	@echo "coverage - check code coverage"
 	@echo "release - package and upload a release"
 	@echo "sdist - package"
 
@@ -18,29 +17,27 @@ clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
-	rm -f pep8.txt
 	rm -f coverage.xml
-	rm -rf __pycache__
+	rm -rf .coverage
+	rm -rf .pytest_cache
+	rm -rf .ruff_cache
 
 lint:
-	flake8 tinycontent tests
+	ruff check tinycontent tests demo
+	ruff format --check tinycontent tests demo
 
 test:
-	python setup.py test
-
-testall:
-	tox
+	pytest
 
 coverage:
-	coverage run --source tinycontent setup.py test
-	coverage report -m
+	pytest --cov=tinycontent --cov-report=term-missing
 
-release: clean lint testall
+release: clean lint test sdist
 	twine upload -r pypi dist/*
 
 sdist: clean
-	python setup.py sdist
+	python -m build
 	ls -l dist
 
 docs:
-	tox -e docs
+	cd docs && sphinx-build -W -b html . _build/html

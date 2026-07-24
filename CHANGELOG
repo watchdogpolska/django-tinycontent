@@ -1,3 +1,16 @@
+v1.0.0
+------
+
+* Modernization: dropped support for Django versions below 5.2 and
+  Python versions below 3.10.
+* Migrated packaging to ``pyproject.toml`` (``setup.py``/``setup.cfg``
+  removed).
+* Added type hints across the package, plus a ``py.typed`` marker.
+* Switched linting from flake8 to Ruff.
+* Added GitHub Actions CI, replacing Travis CI and tox.
+* Replaced the legacy ``{% blocktrans %}`` template tag with its
+  modern alias, ``{% blocktranslate %}``.
+
 v0.7.1
 ------
 

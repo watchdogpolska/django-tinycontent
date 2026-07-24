@@ -1,9 +1,0 @@
-# Dev/test dependencies for the Docker environment. django-tinycontent's own
-# runtime requirements (Django, django-autoslug, markdown) come from setup.py
-# via `pip install -e .`.
-Django>=5.0
-mock>=5.0
-pytest>=8.0
-pytest-django>=4.8
-pytest-cov>=5.0
-flake8>=7.0

@@ -1,49 +1,38 @@
-import django
+from unittest import mock
+
 import pytest
+from django.db import DEFAULT_DB_ALIAS, connections
+from django.test.utils import CaptureQueriesContext
 
-import mock
 from tinycontent.models import TinyContent
-
-# Django 1.5 doesn't have CaptureQueriesContext, and adding support
-# for checking query counts is irritating, so let's just skip those
-# tests.
-SKIP_CACHE_TESTS = django.VERSION < (1, 6)
-
-if not SKIP_CACHE_TESTS:
-    from django.db import DEFAULT_DB_ALIAS, connections
-    from django.test.utils import CaptureQueriesContext
 
 
 class FakeCache:
-    def __init__(self):
-        self.items = {}
+    def __init__(self) -> None:
+        self.items: dict[str, TinyContent] = {}
 
-    def get(self, key):
+    def get(self, key: str) -> TinyContent | None:
         return self.items.get(key, None)
 
-    def set(self, key, value):
+    def set(self, key: str, value: TinyContent) -> None:
         self.items[key] = value
 
-    def delete(self, key):
+    def delete(self, key: str) -> None:
         del self.items[key]
 
 
-if not SKIP_CACHE_TESTS:
-    class QueryCounter(CaptureQueriesContext):
-        def __init__(self):
-            conn = connections[DEFAULT_DB_ALIAS]
-            super().__init__(conn)
+class QueryCounter(CaptureQueriesContext):
+    def __init__(self) -> None:
+        conn = connections[DEFAULT_DB_ALIAS]
+        super().__init__(conn)
 
-        def num_queries(self):
-            return len(self)
+    def num_queries(self) -> int:
+        return len(self)
 
 
 @pytest.mark.django_db
 def test_cache_hit_on_second_time(simple_content):
-    if SKIP_CACHE_TESTS:
-        return
-
-    with mock.patch('tinycontent.models.cache', FakeCache()):
+    with mock.patch("tinycontent.models.cache", FakeCache()):
         with QueryCounter() as q:
             obj = TinyContent.get_content_by_name(simple_content.name)
             assert obj == simple_content
@@ -57,10 +46,7 @@ def test_cache_hit_on_second_time(simple_content):
 
 @pytest.mark.django_db
 def test_cache_invalidated_by_delete(simple_content):
-    if SKIP_CACHE_TESTS:
-        return
-
-    with mock.patch('tinycontent.models.cache', FakeCache()):
+    with mock.patch("tinycontent.models.cache", FakeCache()):
         with QueryCounter() as q:
             obj = TinyContent.get_content_by_name(simple_content.name)
             assert obj == simple_content
@@ -78,28 +64,25 @@ def test_cache_invalidated_by_delete(simple_content):
 
 @pytest.mark.django_db
 def test_cache_invalidated_by_save(simple_content):
-    if SKIP_CACHE_TESTS:
-        return
-
-    with mock.patch('tinycontent.models.cache', FakeCache()):
+    with mock.patch("tinycontent.models.cache", FakeCache()):
         with QueryCounter() as q:
             obj = TinyContent.get_content_by_name(simple_content.name)
             assert obj == simple_content
             assert q.num_queries() == 1
 
         with QueryCounter() as q:
-            simple_content.content = 'hello'
+            simple_content.content = "hello"
             simple_content.save()
-            q.num_queries() == 1
-
-        with QueryCounter() as q:
-            obj = TinyContent.get_content_by_name(simple_content.name)
-            assert obj.name == simple_content.name
-            assert obj.content == 'hello'
             assert q.num_queries() == 1
 
         with QueryCounter() as q:
             obj = TinyContent.get_content_by_name(simple_content.name)
             assert obj.name == simple_content.name
-            assert obj.content == 'hello'
+            assert obj.content == "hello"
+            assert q.num_queries() == 1
+
+        with QueryCounter() as q:
+            obj = TinyContent.get_content_by_name(simple_content.name)
+            assert obj.name == simple_content.name
+            assert obj.content == "hello"
             assert q.num_queries() == 0

@@ -4,6 +4,6 @@ from .conf import get_app_verbose_name
 
 
 class TinyContentConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'tinycontent'
-    verbose_name = get_app_verbose_name()
+    default_auto_field: str = "django.db.models.BigAutoField"
+    name: str = "tinycontent"
+    verbose_name: str = get_app_verbose_name()

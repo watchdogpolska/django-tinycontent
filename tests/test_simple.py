@@ -10,9 +10,7 @@ def test_non_existent(simple_content):
 
 @pytest.mark.django_db
 def test_simple_existent(simple_content):
-    assert "This is a test." == render_template(
-        "{% tinycontent_simple 'foobar' %}"
-    )
+    assert "This is a test." == render_template("{% tinycontent_simple 'foobar' %}")
 
 
 @pytest.mark.django_db
