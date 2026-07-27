@@ -1,0 +1,11 @@
+.git
+.tox
+.cache
+__pycache__
+*.pyc
+*.egg-info
+.eggs
+build
+dist
+docs/_build
+demo/db.sqlite3

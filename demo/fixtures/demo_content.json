@@ -1,0 +1,29 @@
+[
+  {
+    "model": "tinycontent.tinycontentfileupload",
+    "pk": 1,
+    "fields": {
+      "name": "Sample Brochure",
+      "slug": "sample-brochure",
+      "file": "tinycontent/uploads/sample.txt",
+      "created": "2026-01-01T00:00:00Z",
+      "modified": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tinycontent.tinycontent",
+    "pk": 1,
+    "fields": {
+      "name": "welcome",
+      "content": "# Welcome to django-tinycontent\n\nThis block is stored in the database and edited through the **Django admin**. It's rendered here through the chained Markdown + file-upload filters configured in `demo/demo/settings.py` (`TINYCONTENT_FILTER`).\n\n- Try editing this block in `/admin/`.\n- Then reload this page.\n"
+    }
+  },
+  {
+    "model": "tinycontent.tinycontent",
+    "pk": 2,
+    "fields": {
+      "name": "brochure",
+      "content": "Download the [sample brochure](@file:sample-brochure), served through the built-in `uploaded_file_filter`."
+    }
+  }
+]

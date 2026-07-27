@@ -1,7 +1,10 @@
 import base64
+from typing import Any
+
 import autoslug
 from django.core.cache import cache
 from django.db import models
+
 from tinycontent.conf import get_filter_list
 
 
@@ -9,10 +12,10 @@ class TinyContent(models.Model):
     name = models.CharField(max_length=100, unique=True)
     content = models.TextField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def rendered_content(self):
+    def rendered_content(self) -> str:
         filters = get_filter_list()
 
         content = self.content
@@ -23,7 +26,7 @@ class TinyContent(models.Model):
         return content
 
     @staticmethod
-    def get_content_by_name(name):
+    def get_content_by_name(name: str) -> "TinyContent":
         cache_key = TinyContent.get_cache_key(name)
         obj = cache.get(cache_key)
 
@@ -34,34 +37,31 @@ class TinyContent(models.Model):
         return obj
 
     @staticmethod
-    def get_cache_key(name):
-        return 'tinycontent_%s' % base64.b64encode(bytes(name, 'utf-8'))
+    def get_cache_key(name: str) -> str:
+        return f"tinycontent_{base64.b64encode(bytes(name, 'utf-8'))}"
 
-    def delete(self, *args, **kwargs):
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
         cache.delete(TinyContent.get_cache_key(self.name))
         return super().delete(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         cache.delete(TinyContent.get_cache_key(self.name))
         return super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Content block'
+        verbose_name = "Content block"
 
 
 class TinyContentFileUpload(models.Model):
-    name = models.CharField(
-        max_length=60,
-        help_text='The name of the file.'
-    )
-    slug = autoslug.AutoSlugField(populate_from='name', unique=True)
-    file = models.FileField(upload_to='tinycontent/uploads')
+    name = models.CharField(max_length=60, help_text="The name of the file.")
+    slug = autoslug.AutoSlugField(populate_from="name", unique=True)
+    file = models.FileField(upload_to="tinycontent/uploads")
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
-        verbose_name = 'File upload'
-        ordering = ('-created', )
+        verbose_name = "File upload"
+        ordering = ("-created",)

@@ -1,10 +1,8 @@
-*****
-WARNING: This code is entirely unsupported, 0.9.0 will be the last
-release of django-tinycontent.
-*****
-
 django-tinycontent is a simple Django application for re-usable
 content blocks, much like django-boxes.
+
+This is a fork under active maintenance, picking up where the
+original project left off.
 
 Installation is simple::
 
@@ -41,5 +39,5 @@ a dotted path to a callable that takes the raw content and returns the
 transformed content. You can also set ``TINYCONTENT_FILTER`` to be a
 list of dotted paths to callables, to chain filters together.
 
-django-tinycontent supports all versions of Django from 2.0 to
-3.0. Python 3.6, 3.7 and 3.8 are supported.
+django-tinycontent supports Django 5.2 and above. Python 3.10, 3.11,
+3.12 and 3.13 are supported.

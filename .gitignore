@@ -4,11 +4,15 @@ docs/_build/
 dist/
 *.egg
 .eggs/
-pep8.txt
 coverage.xml
-.tox/
 build/
 .coverage
 test.db
 tests/testmedia/
 .cache/
+.pytest_cache/
+.ruff_cache/
+demo/db.sqlite3
+demo/media/tinycontent/uploads/*
+!demo/media/tinycontent/uploads/sample.txt
+.env

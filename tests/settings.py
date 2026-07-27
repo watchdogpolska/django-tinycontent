@@ -1,34 +1,29 @@
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test.db'
-    }
-}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "test.db"}}
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'tinycontent.apps.TinyContentConfig',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "tinycontent.apps.TinyContentConfig",
 )
 
-ROOT_URLCONF = 'tests.urls'
-SECRET_KEY = 'thisbagismadefromrecycledmaterial'
+ROOT_URLCONF = "tests.urls"
+SECRET_KEY = "thisbagismadefromrecycledmaterial"
 
-MEDIA_ROOT = 'tests/testmedia'
-MEDIA_URL = 'http://media.example.com/'
+MEDIA_ROOT = "tests/testmedia"
+MEDIA_URL = "http://media.example.com/"
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'APP_DIRS': True,
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
     },
 ]
 
-TINYCONTENT_VERBOSE_NAME = 'Custom Tiny Content'
+TINYCONTENT_VERBOSE_NAME = "Custom Tiny Content"

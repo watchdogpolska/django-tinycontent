@@ -15,7 +15,10 @@ def render_template_with_context(input, context):
 
 
 def render_for_test_user(t, user):
-    ctx = {'user': user, 'perms': PermWrapper(user), }
+    ctx = {
+        "user": user,
+        "perms": PermWrapper(user),
+    }
     return render_template_with_context(t, ctx)
 
 

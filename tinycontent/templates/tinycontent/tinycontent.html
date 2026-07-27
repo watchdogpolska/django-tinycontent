@@ -3,5 +3,5 @@
 
 {% if perms.tinycontent.change_tinycontent %}
 {% url 'admin:tinycontent_tinycontent_change' obj.id as edit_url %}
-{% blocktrans %}(<a href="{{edit_url}}" title="Edit this content block">Edit</a>){% endblocktrans %}
+{% blocktranslate %}(<a href="{{edit_url}}" title="Edit this content block">Edit</a>){% endblocktranslate %}
 {% endif %}
