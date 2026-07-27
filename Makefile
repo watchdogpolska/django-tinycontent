@@ -1,4 +1,4 @@
-.PHONY: clean docs lint test coverage sdist
+.PHONY: clean docs lint test coverage sdist demo-build demo-up demo-shell demo-down demo-reset
 
 # All tests/python/dependency commands run inside the dev container, not
 # on the host - see the hard rule in CLAUDE.md.
@@ -11,6 +11,11 @@ help:
 	@echo "test - run tests"
 	@echo "coverage - check code coverage"
 	@echo "sdist - package"
+	@echo "demo-build - build the demo dev container image"
+	@echo "demo-up - run the demo site at http://localhost:8001"
+	@echo "demo-shell - shell into the demo dev container"
+	@echo "demo-down - stop and remove the demo container"
+	@echo "demo-reset - wipe the demo db and uploaded media for a clean re-seed"
 
 clean:
 	rm -rf build/
@@ -47,3 +52,21 @@ sdist: clean
 
 docs:
 	$(RUN) sh -c "cd docs && sphinx-build -W -b html . _build/html"
+
+# These operate on the compose lifecycle itself (not Python/tests/deps), so
+# unlike the targets above they don't go through $(RUN).
+demo-build:
+	docker compose build
+
+demo-up:
+	docker compose up web
+
+demo-shell:
+	docker compose run --rm web sh
+
+demo-down:
+	docker compose down
+
+demo-reset:
+	rm -f demo/db.sqlite3
+	git clean -fdx -- demo/media
