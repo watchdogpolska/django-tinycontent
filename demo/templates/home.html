@@ -27,8 +27,11 @@
   <hr>
 
   <h2><code>{% templatetag openblock %} tinycontent 'footer_note' {% templatetag closeblock %}...{% templatetag openblock %} endtinycontent {% templatetag closeblock %}</code></h2>
-  <p>No "footer_note" block exists yet, so the fallback text below is rendered instead. Log in as the demo
-  superuser and reload to see the "Add some" prompt from <code>tinycontent_add.html</code>.</p>
+  <p>No "footer_note" block exists yet, so the fallback text below is rendered instead. Content blocks are
+  only created by the template usage indexer now, not manually via the admin - run
+  <code>python manage.py tinycontent_index</code> (e.g. via <code>make demo-shell</code>) to create one for
+  "footer_note", then reload as the demo superuser to see the "Edit" prompt from <code>tinycontent_add.html</code>
+  instead.</p>
   <div>
     {% tinycontent 'footer_note' %}
     This is the fallback text, rendered because no "footer_note" content block has been created yet.

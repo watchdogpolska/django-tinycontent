@@ -30,19 +30,38 @@ def test_with_user(simple_content, user, user_noauth):
 
 
 @pytest.mark.django_db
-def test_with_user_for_nonexistent_tag(simple_content, user, user_noauth):
+def test_with_user_for_nonexistent_tag(user, user_noauth):
+    # There's no more "add" admin flow - a row that genuinely doesn't exist
+    # yet (indexing hasn't run) just renders the plain fallback, for anyone.
     t = "{% tinycontent 'notthere' %}Text if empty.{% endtinycontent %}"
 
     assert "Text if empty." == render_for_test_user(t, user_noauth)
-
-    root_add_url = reverse("admin:tinycontent_tinycontent_add")
-
-    rendered = render_for_test_user(t, user)
-    assert f"{root_add_url}?name=notthere" in rendered
-    assert "Add" in rendered
-    assert "Text if empty." in rendered
+    assert "Text if empty." == render_for_test_user(t, user)
 
     t = "{% tinycontent_simple 'notthere' %}"
+    assert render_for_test_user(t, user_noauth) == ""
+    assert render_for_test_user(t, user) == ""
+
+
+@pytest.mark.django_db
+def test_with_user_for_blank_content(blank_content, user, user_noauth):
+    t = "{% tinycontent 'placeholder' %}Text if empty.{% endtinycontent %}"
+
+    assert "Text if empty." == render_for_test_user(t, user_noauth)
+
+    edit_url = reverse(
+        "admin:tinycontent_tinycontent_change",
+        args=[
+            blank_content.pk,
+        ],
+    )
+
     rendered = render_for_test_user(t, user)
-    assert f"{root_add_url}?name=notthere" in rendered
-    assert "Add" in rendered
+    assert edit_url in rendered
+    assert "Edit" in rendered
+    assert "Text if empty." in rendered
+
+    t = "{% tinycontent_simple 'placeholder' %}"
+    rendered = render_for_test_user(t, user)
+    assert edit_url in rendered
+    assert "Edit" in rendered

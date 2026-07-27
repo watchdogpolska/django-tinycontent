@@ -26,6 +26,7 @@ Contents
    installation
    templates
    managing_blocks
+   indexing
    filters
    changelog
 

@@ -38,6 +38,14 @@ def html_content():
 
 
 @pytest.fixture()
+def blank_content():
+    content, _ = TinyContent.objects.get_or_create(
+        name="placeholder", content="", autocreated=True, active=False
+    )
+    return content
+
+
+@pytest.fixture()
 def user():
     user, _ = User.objects.get_or_create(username="dom")
 
