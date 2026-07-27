@@ -1,6 +1,54 @@
 Release Notes
 =============
 
+v2.0.0
+------
+
+.. warning::
+
+   This release changes two default behaviors: content blocks can no
+   longer be created manually via the admin, and template scanning
+   now runs automatically (and writes to the database) after
+   ``migrate``/on app startup unless disabled. See below and
+   :doc:`indexing`.
+
+* Add template usage indexing: ``TinyContentIndexer.build()`` scans
+  templates for ``tinycontent``/``tinycontent_simple`` tag usages,
+  records them in a new ``TinyContentUsage`` model, and autocreates
+  a blank content block for any referenced name that doesn't exist
+  yet. Runs automatically after ``migrate`` (production) or on app
+  startup (``DEBUG=True``) unless ``TINYCONTENT_AUTO_INDEX = False``,
+  and can otherwise be triggered via the new ``tinycontent_index``
+  management command, an admin action, or directly.
+* **Backwards incompatible:** content blocks can no longer be created
+  manually via the admin - only the indexer creates them now.
+* ``TinyContent`` gains ``title`` (auto-derived from ``name``),
+  ``active`` (an admin-facing bookkeeping flag) and ``autocreated``
+  fields. ``name`` is read-only once a block exists.
+* **Backwards incompatible:** content blocks that are still
+  referenced by a template can no longer be deleted.
+* See :doc:`indexing` and :doc:`managing_blocks` for details.
+
+v1.0.1
+------
+
+* Added Makefile helper commands for the demo dev container
+  (``demo-build``, ``demo-up``, ``demo-shell``, ``demo-down``,
+  ``demo-reset``).
+
+v1.0.0
+------
+
+* Modernization: dropped support for Django versions below 5.2 and
+  Python versions below 3.10.
+* Migrated packaging to ``pyproject.toml`` (``setup.py``/``setup.cfg``
+  removed).
+* Added type hints across the package, plus a ``py.typed`` marker.
+* Switched linting from flake8 to Ruff.
+* Added GitHub Actions CI, replacing Travis CI and tox.
+* Replaced the legacy ``{% blocktrans %}`` template tag with its
+  modern alias, ``{% blocktranslate %}``.
+
 v0.9.0
 ------
 

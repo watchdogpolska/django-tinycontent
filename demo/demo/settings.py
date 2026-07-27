@@ -79,3 +79,8 @@ TINYCONTENT_FILTER = [
     "tinycontent.filters.builtin.uploaded_file_filter",
 ]
 TINYCONTENT_VERBOSE_NAME = "Demo Content"
+
+# Off so home.html's "footer_note" example keeps demonstrating the
+# {% tinycontent %}...{% endtinycontent %} fallback live (a real content block
+# would otherwise get autocreated for it the moment the dev server starts).
+TINYCONTENT_AUTO_INDEX = False
