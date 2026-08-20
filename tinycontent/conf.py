@@ -13,6 +13,10 @@ def get_auto_index_enabled() -> bool:
     return getattr(settings, "TINYCONTENT_AUTO_INDEX", True)
 
 
+def get_use_tinymce() -> bool:
+    return getattr(settings, "TINYCONTENT_USE_TINYMCE", False)
+
+
 def get_filter_list() -> list[Callable[[str], str]]:
     try:
         path_list = settings.TINYCONTENT_FILTER

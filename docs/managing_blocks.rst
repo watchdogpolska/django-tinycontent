@@ -15,7 +15,9 @@ Each content block has:
   first time the block is saved (replacing ``:-_.`` with spaces and
   capitalizing each word), but editable afterwards.
 * ``content`` - the raw content, rendered through any configured
-  :ref:`filters`.
+  :ref:`filters`. Edited as a plain textarea by default, or with a
+  `TinyMCE <https://github.com/jazzband/django-tinymce>`_ rich text
+  editor - see :doc:`installation`.
 * ``active`` - an admin-facing bookkeeping flag. It does not affect
   rendering.
 * A read-only list of every template/line where the block is
