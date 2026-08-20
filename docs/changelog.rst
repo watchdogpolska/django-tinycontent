@@ -1,6 +1,18 @@
 Release Notes
 =============
 
+v2.1.0
+------
+
+* Add an optional `TinyMCE <https://github.com/jazzband/django-tinymce>`_
+  rich text editor for the ``content`` field in the admin, enabled via
+  the new ``TINYCONTENT_USE_TINYMCE`` setting (default ``False``).
+  ``django-tinymce`` is an optional extra (``pip install
+  "django-tinycontent[tinymce]"``) with an unpinned lower bound, and is
+  only imported when the setting is enabled, so installing
+  ``django-tinycontent`` never forces a ``django-tinymce`` version on a
+  host project that already depends on it. See :doc:`installation`.
+
 v2.0.0
 ------
 

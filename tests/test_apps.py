@@ -4,7 +4,7 @@ import pytest
 from django.db import DatabaseError
 
 from tinycontent.apps import TinyContentConfig
-from tinycontent.conf import get_auto_index_enabled
+from tinycontent.conf import get_auto_index_enabled, get_use_tinymce
 
 
 def test_get_auto_index_enabled_defaults_true():
@@ -14,6 +14,15 @@ def test_get_auto_index_enabled_defaults_true():
 def test_get_auto_index_enabled_respects_setting(settings):
     settings.TINYCONTENT_AUTO_INDEX = False
     assert get_auto_index_enabled() is False
+
+
+def test_get_use_tinymce_defaults_false():
+    assert get_use_tinymce() is False
+
+
+def test_get_use_tinymce_respects_setting(settings):
+    settings.TINYCONTENT_USE_TINYMCE = True
+    assert get_use_tinymce() is True
 
 
 def test_auto_index_disabled_while_running_under_pytest():

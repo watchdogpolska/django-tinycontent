@@ -1,5 +1,9 @@
+import sys
+
 import pytest
 from django.contrib import admin
+from django.contrib.admin.widgets import AdminTextareaWidget
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import ProtectedError
 from django.test import RequestFactory, override_settings
 
@@ -102,3 +106,45 @@ def test_rebuild_index_action_runs_indexer(tc_admin, rf, tmp_path, monkeypatch):
         tc_admin.rebuild_index(request, TinyContent.objects.none())
 
     assert TinyContent.objects.filter(name="welcome").exists()
+
+
+def test_content_field_uses_plain_textarea_by_default(tc_admin, rf, simple_content):
+    request = rf.get("/admin/")
+    form_class = tc_admin.get_form(request, simple_content)
+    widget = form_class.base_fields["content"].widget
+    assert type(widget) is AdminTextareaWidget
+
+
+def test_content_field_uses_tinymce_when_enabled(tc_admin, rf, simple_content):
+    tinymce_widgets = pytest.importorskip("tinymce.widgets")
+
+    with override_settings(TINYCONTENT_USE_TINYMCE=True):
+        request = rf.get("/admin/")
+        form_class = tc_admin.get_form(request, simple_content)
+
+    widget = form_class.base_fields["content"].widget
+    assert isinstance(widget, tinymce_widgets.TinyMCE)
+
+
+def test_tinymce_widget_defaults_to_gpl_license_key(tc_admin):
+    pytest.importorskip("tinymce.widgets")
+
+    widget = tc_admin._tinymce_widget()
+    assert widget.mce_attrs["license_key"] == "gpl"
+
+
+def test_tinymce_widget_respects_host_license_key(tc_admin):
+    pytest.importorskip("tinymce.widgets")
+
+    with override_settings(TINYMCE_DEFAULT_CONFIG={"license_key": "abc123"}):
+        widget = tc_admin._tinymce_widget()
+
+    assert "license_key" not in widget.mce_attrs
+
+
+def test_tinymce_enabled_without_package_raises(tc_admin, monkeypatch):
+    pytest.importorskip("tinymce.widgets")
+    monkeypatch.setitem(sys.modules, "tinymce.widgets", None)
+
+    with pytest.raises(ImproperlyConfigured):
+        tc_admin._tinymce_widget()

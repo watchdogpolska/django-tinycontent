@@ -1,9 +1,12 @@
 from typing import Any
 
+from django.conf import settings
 from django.contrib import admin
-from django.db.models import Count, QuerySet
+from django.core.exceptions import ImproperlyConfigured
+from django.db.models import Count, Field, QuerySet
 from django.http import HttpRequest
 
+from tinycontent.conf import get_use_tinymce
 from tinycontent.indexer import TinyContentIndexer
 from tinycontent.models import TinyContent, TinyContentFileUpload, TinyContentUsage
 
@@ -83,6 +86,33 @@ class TinyContentAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
+
+    def formfield_for_dbfield(
+        self, db_field: Field, request: HttpRequest, **kwargs: Any
+    ) -> Any:
+        if db_field.name == "content" and get_use_tinymce():
+            kwargs["widget"] = self._tinymce_widget()
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+    @staticmethod
+    def _tinymce_widget() -> Any:
+        try:
+            from tinymce.widgets import TinyMCE
+        except ImportError as exc:
+            raise ImproperlyConfigured(
+                "TINYCONTENT_USE_TINYMCE is enabled but django-tinymce is not "
+                'installed. Install it with `pip install "django-tinycontent'
+                '[tinymce]"` (or `pip install django-tinymce` directly), and '
+                'add "tinymce" to INSTALLED_APPS.'
+            ) from exc
+
+        # TinyMCE 6+ shows an "evaluation mode" nag unless license_key is
+        # set; default to the GPL declaration (accurate for this package's
+        # fully self-hosted, statically-bundled TinyMCE) without overriding
+        # a host project's own TINYMCE_DEFAULT_CONFIG license_key.
+        default_config = getattr(settings, "TINYMCE_DEFAULT_CONFIG", {})
+        mce_attrs = {} if "license_key" in default_config else {"license_key": "gpl"}
+        return TinyMCE(mce_attrs=mce_attrs)
 
     @admin.action(description="Rebuild template usage index")
     def rebuild_index(

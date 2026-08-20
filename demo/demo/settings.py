@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "tinymce",
     "tinycontent",
 ]
 
@@ -79,6 +80,24 @@ TINYCONTENT_FILTER = [
     "tinycontent.filters.builtin.uploaded_file_filter",
 ]
 TINYCONTENT_VERBOSE_NAME = "Demo Content"
+
+# Showcases the optional TinyMCE admin editor - requires "tinymce" in
+# INSTALLED_APPS above and the `tinymce` extra installed (see pyproject.toml).
+TINYCONTENT_USE_TINYMCE = True
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "promotion": False,
+    "height": 500,
+    "menubar": True,
+    "lineheight": 1,
+    "plugins": "advlist,autolink,lists,link,image,charmap,preview,anchor,"
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,"
+    "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | lineheight | fontsizeselect |"
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "charmap | removeformat | help",
+}
 
 # Off so home.html's "footer_note" example keeps demonstrating the
 # {% tinycontent %}...{% endtinycontent %} fallback live (a real content block
