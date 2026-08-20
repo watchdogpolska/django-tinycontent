@@ -54,7 +54,10 @@ def test_cache_invalidated_by_delete(simple_content):
 
         with QueryCounter() as q:
             simple_content.delete()
-            assert q.num_queries() == 1
+            # 2, not 1: TinyContentUsage.content is on_delete=PROTECT, so
+            # Django's deletion collector always checks for related usages
+            # before issuing the actual DELETE.
+            assert q.num_queries() == 2
 
         with QueryCounter() as q:
             with pytest.raises(TinyContent.DoesNotExist):

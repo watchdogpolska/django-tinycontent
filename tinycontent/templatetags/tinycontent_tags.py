@@ -22,18 +22,22 @@ class TinyContentNode(template.Node):
         return ":".join(x.resolve(context) for x in self.args)
 
     def render(self, context: template.Context) -> str:
+        name = self.get_name(context)
         try:
-            name = self.get_name(context)
-            obj = TinyContent.get_content_by_name(name)
-            context.update({"obj": obj})
-            return render_to_string("tinycontent/tinycontent.html", context.flatten())
+            obj: TinyContent | None = TinyContent.get_content_by_name(name)
         except TinyContent.DoesNotExist:
+            obj = None
+
+        if obj is None or not obj.content:
             rval = self.nodelist.render(context)
-            context.update({"name": name})
+            context.update({"name": name, "obj": obj})
             rval += render_to_string(
                 "tinycontent/tinycontent_add.html", context.flatten()
             )
             return rval
+
+        context.update({"obj": obj})
+        return render_to_string("tinycontent/tinycontent.html", context.flatten())
 
 
 @register.tag
@@ -56,9 +60,13 @@ def tinycontent_simple(context: template.Context, *args: Any) -> str:
 
     content_name = ":".join(map(force_str, args))
     try:
-        obj = TinyContent.get_content_by_name(content_name)
-        context.update({"obj": obj})
-        return render_to_string("tinycontent/tinycontent.html", context.flatten())
+        obj: TinyContent | None = TinyContent.get_content_by_name(content_name)
     except TinyContent.DoesNotExist:
-        context.update({"name": content_name})
+        obj = None
+
+    if obj is None or not obj.content:
+        context.update({"name": content_name, "obj": obj})
         return render_to_string("tinycontent/tinycontent_add.html", context.flatten())
+
+    context.update({"obj": obj})
+    return render_to_string("tinycontent/tinycontent.html", context.flatten())
