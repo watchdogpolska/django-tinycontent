@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-v2.2.0
+v2.1.2
 ------
 
 * Add a `Renovate <https://docs.renovatebot.com/>`_ configuration
