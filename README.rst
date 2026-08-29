@@ -1,8 +1,7 @@
 django-tinycontent is a simple Django application for re-usable
 content blocks, much like django-boxes.
 
-This is a fork under active maintenance, picking up where the
-original project left off.
+Originally created by Dominic Rodger; now independently maintained.
 
 Installation is simple::
 

@@ -42,7 +42,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "django-tinycontent"
-copyright = "2013 - %d, Dominic Rodger" % date.today().year
+copyright = "2013 Dominic Rodger, 2024-%d PiotrIw" % date.today().year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
