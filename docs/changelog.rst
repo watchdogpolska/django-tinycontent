@@ -1,6 +1,16 @@
 Release Notes
 =============
 
+v2.1.2
+------
+
+* Add a `Renovate <https://docs.renovatebot.com/>`_ configuration
+  (``renovate.json``) for automated dependency updates, covering
+  ``pyproject.toml`` dependencies/extras and the GitHub Actions
+  versions pinned in ``.github/workflows/ci.yml``. Updates are grouped
+  weekly, wait 7 days after a release before being proposed, target
+  the ``dev`` branch, and never auto-merge.
+
 v2.1.1
 ------
 
