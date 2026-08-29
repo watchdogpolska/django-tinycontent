@@ -1,6 +1,15 @@
 Release Notes
 =============
 
+v2.1.1
+------
+
+* Detached the repository from the original GitHub fork network; the
+  project is now maintained as a standalone package rather than a
+  fork. LICENSE and documentation copyright notices updated to
+  credit both the original author, Dominic Rodger, and the current
+  maintainer.
+
 v2.1.0
 ------
 
